@@ -23,7 +23,7 @@ window.onload = function () {
       price.classList.add('price');
       
       h2.appendChild(document.createTextNode(items[i].name));
-      price.appendChild(document.createTextNode(items[i].price));
+      price.appendChild(document.createTextNode(format_cs(items[i].price)));
       li.appendChild(h2);
       li.appendChild(price);
       fragment.appendChild(li);
