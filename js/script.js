@@ -1,16 +1,15 @@
 window.onload = function () {
-  'use strict';
-
-  const cart_btns = document.querySelectorAll('.js_cart_btn'),//カートボタン
+  var cart_btns = document.querySelectorAll('.js_cart_btn'),//カートボタン
   cart_cnt_icon = document.getElementById('js_cart_cnt'),//カートの個数アイコン
+  cart_cnt = 0,//カートのアイテム数
   clicked = [],//クリックされたカートアイコンのインデックス
   save_items = [],//ローカルストレージ保存用の配列
   items = JSON.parse(localStorage.getItem("items"));//ローカルストレージの商品データ配列
-  let cart_cnt = 0;//カートのアイテム数
+
   // すでにカートに商品が入っている場合、カートアイコンのカウント表示とカートボタンをアクティブにする
   if (items) {
-    let id;
-    for (let i = 0; i < items.length; i++) {
+    var id;
+    for (var i = 0; i < items.length; i++) {
       id = items[i].id;
       save_items.push(items[i]);
       clicked.push(id);
@@ -24,12 +23,13 @@ window.onload = function () {
   }
 
   // カートボタンを押した際の処理
-  cart_btns.forEach(function (cart_btn, index) {
-    cart_btn.addEventListener('click', function () {
+  cart_btns.forEach(function (cart_btn,index) {
+    cart_btn.addEventListener('click',function () {
 
-      if (/* カートボタンがすでに押されているかの判定 */) {
+      // カートボタンがすでに押されているかの判定
+      if (clicked.indexOf(index) >= 0) {
 
-        for (let i = 0; i < clicked.length; i++) {
+        for (var i = 0; i < clicked.length; i++) {
           if(clicked[i] == index){
             clicked.splice(i, 1);
             save_items.splice(i, 1);
@@ -38,26 +38,24 @@ window.onload = function () {
 
         inactivate_btn(index);
 
-      }else if(/* カートボタンが押されていない場合 */){
+      }else if(clicked.indexOf(index) == -1){
 
+        var name = cart_btn.dataset.name,//商品の名前を取得
+        price = Number(cart_btn.dataset.price);//商品の値段を取得
 
-        let name,//商品の名前を取得
-        price;//商品の値段を取得
-
-        //クリックされた商品をインデックス(clicked)に追加
-
-        //ローカルストレージ保存用の配列に追加
-        /*
-        * @param {Number} id:    商品の識別番号
-        * @param {String} name:  商品の名前
-        * @maram {Number} price: 商品の値段
-        */
+        clicked.push(index);
+        save_items.push({
+          id: index,
+          name: name,
+          price: price
+        });
 
         activate_btn(index);
 
       }
 
       // ローカルストレージに商品データを保管
+      localStorage.setItem("items",JSON.stringify(save_items));
 
     });
   });
@@ -80,9 +78,4 @@ window.onload = function () {
     cart_btns[index].classList.remove('item_cart_btn_active');
   }
 
-
 };
-
-
-
-
