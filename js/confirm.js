@@ -8,6 +8,11 @@ window.onload = function () {
 
   let total = 0;//商品の合計金額
 
+  // format_cs関数の定義
+  function format_cs(number) {
+    return number.toLocaleString('ja-JP');
+  }
+
   if (items) {
     // カート商品の数分、要素を作成
     for (var i = 0; i < items.length; i++) {
